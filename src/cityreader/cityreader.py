@@ -66,8 +66,8 @@ def cityreader(cities=[]):
                 first_line = False
             else:
                 name = row[index_values[0]]
-                lat = row[index_values[1]]
-                lon = row[index_values[2]]
+                lat = float(row[index_values[1]])
+                lon = float(row[index_values[2]])
                 cities.append(City(name, lat, lon))
 
     return cities
@@ -110,6 +110,31 @@ for c in cities:
 
 # TODO Get latitude and longitude values from the user
 
+def display_example():
+    print("   [X][ ][ ][ ]                       [ ][ ][ ][X]  ")
+    print("   [ ][ ][ ][ ]                       [ ][ ][ ][ ]  ")
+    print("   [ ][ ][ ][ ]                       [ ][ ][ ][ ]  ")
+    print("   [ ][ ][ ][X]                       [X][ ][ ][ ]  ")
+    print("upper-left/lower-right           upper-right/lower-left\n")
+    print("Please enter latitude and longitude of the lower-left/upper-right corners")
+    print("or the upper-left/lower-right corners of an area you would like to search.")
+    print("Your input should be \"lat, lon\"")
+    print("Example input: \"45, -120\"\n")
+
+from os import system
+from time import sleep
+
+def get_corner():
+    while True:
+        system("cls||clear")
+        display_example()
+        user_in = input("Please enter one corner >>")
+        try:
+            return user_in.split(", ")
+        except:
+            print("Invalid input. Please try again.")
+            sleep(0.8)
+
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     # within will hold the cities that fall within the specified region
@@ -120,3 +145,8 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     # the specified coordinates.
 
     return within
+
+# corner1 = get_corner()
+# corner2 = get_corner()
+# cities_within = cityreader_stretch(corner1[0], corner1[1], corner2[0], corner2[1])
+
