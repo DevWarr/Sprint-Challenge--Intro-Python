@@ -10,6 +10,9 @@ class City:
         self.lat = lat
         self.lon = lon
 
+    def __repr__(self):
+        return f"< City: {self.name}, {self.lat}, {self.lon} >"
+
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -30,7 +33,42 @@ def cityreader(cities=[]):
     # TODO Implement the functionality to read from the 'cities.csv' file
     # For each city record, create a new City instance and add it to the
     # `cities` list
-    reader = csv.reader("cities.csv")
+
+    with open("cities.csv", newline="") as csvfile:
+
+        # Create our reader
+        reader = csv.reader(csvfile)
+
+        # =============================================================
+        # In order to dynamically find our class's needed attributes,
+        # We can look at the first line to find our attr names.
+        # Whatever index our attr names are at on the first row
+        #     is the same index we can use for all other rows.
+        #
+        # Example:
+        #     first row:  ['city',       'extra', 'lat', 'lon', 'pop']
+        #     second row: ['carrollton', 'texas', '45',  '120', '45]
+        #
+        #     By looking at the first row,
+        #         we know that all other rows will have the
+        #         'city', 'lat', and 'lon' at indices 0, 2, and 3.
+        #
+        # We could hardcode these values in, but this first_line search
+        #     makes the search dynamic, in case the csv file changes.
+        # =============================================================
+        first_line = True
+        index_values = []
+
+        for row in reader:
+            if first_line:
+                index_values = [
+                    i for i, val in enumerate(row) if val in ["city", "lat", "lng"]]
+                first_line = False
+            else:
+                name = row[index_values[0]]
+                lat = row[index_values[1]]
+                lon = row[index_values[2]]
+                cities.append(City(name, lat, lon))
 
     return cities
 
