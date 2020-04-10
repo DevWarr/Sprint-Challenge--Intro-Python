@@ -1,5 +1,7 @@
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
+from os import system
+from time import sleep
 import csv
 
 
@@ -110,7 +112,9 @@ for c in cities:
 
 # TODO Get latitude and longitude values from the user
 
+
 def display_example():
+    print()  # Empty line
     print("   [X][ ][ ][ ]                       [ ][ ][ ][X]  ")
     print("   [ ][ ][ ][ ]                       [ ][ ][ ][ ]  ")
     print("   [ ][ ][ ][ ]                       [ ][ ][ ][ ]  ")
@@ -121,32 +125,37 @@ def display_example():
     print("Your input should be \"lat, lon\"")
     print("Example input: \"45, -120\"\n")
 
-from os import system
-from time import sleep
 
-def get_corner():
+def get_corner(corner_num):
     while True:
         system("cls||clear")
         display_example()
-        user_in = input("Please enter one corner >>")
+        user_in = input(f"Please enter corner {str(corner_num)}. >>")
         try:
-            return user_in.split(", ")
+            corner = user_in.split(", ")
+            return [float(corner[0]), float(corner[1])]
         except:
             print("Invalid input. Please try again.")
             sleep(0.8)
 
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
-    # within will hold the cities that fall within the specified region
-    within = []
 
-    # TODO Ensure that the lat and lon valuse are all floats
+    # TODO Ensure that the lat and lon values are all floats
     # Go through each city and check to see if it falls within
     # the specified coordinates.
+    def is_within(city_lat, city_lon):
+        if not (lat1 < city_lat < lat2 or lat2 < city_lat < lat1):
+            return False
+        if not (lon1 < city_lon < lon2 or lon2 < city_lon < lon1):
+            return False
+        return True
 
-    return within
+    return [city for city in cities if is_within(city.lat, city.lon)]
 
-# corner1 = get_corner()
-# corner2 = get_corner()
-# cities_within = cityreader_stretch(corner1[0], corner1[1], corner2[0], corner2[1])
 
+if __name__ == "__main__":
+    corner1 = get_corner(1)
+    corner2 = get_corner(2)
+    cities_within = cityreader_stretch(
+        corner1[0], corner1[1], corner2[0], corner2[1])
